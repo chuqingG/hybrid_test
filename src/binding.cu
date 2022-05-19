@@ -25,6 +25,13 @@ void bind_scatter_nd(pybind11::module &m) {
 }
 
 
+void bind_gather_nd(pybind11::module &m) {
+    m.def("gather_nd_ori", gather_nd<float>, 
+           "gather_nd_ori(output, indices, data)"
+           );
+}
+
+
 template <typename T>
 void bind_tensor(pybind11::module &m) {
     pybind11::class_<Tensor<T>>(m, "Tensor")
@@ -47,5 +54,5 @@ PYBIND11_MODULE(fastop, m) {
 
     bind_multiply_vector(m);
     bind_scatter_nd(m);
-
+    bind_gather_nd(m);
 }
