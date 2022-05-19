@@ -21,10 +21,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 cuda_add_library(fastop SHARED
   src/binding.cu)
 
-# add_executable(
-#   tensor
-#   src/tensor.h
-# )
 
 target_link_libraries(fastop
   ${PYTHON_LIBRARIES}

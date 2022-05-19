@@ -91,12 +91,12 @@ T* ilist2list(std::initializer_list<T> &ilist){
     return res;
 }
 
-
+template <typename T>
 void call_scatter(int grid, int block, 
-                const float* update, const int64_t* indices,
-                float* output, const int64_t* output_dim,
+                const T* update, const int64_t* indices,
+                T* output, const int64_t* output_dim,
                 size_t remain, size_t slice_size, size_t end_size){
-    ScatterNdCUDAKernel<float><<<grid, block, 0>>>(
+    ScatterNdCUDAKernel<T><<<grid, block, 0>>>(
         update, indices, output,
         output_dim, remain, slice_size, end_size);
 }

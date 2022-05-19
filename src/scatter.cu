@@ -142,23 +142,19 @@ void scatter_nd(pybind11::array_t<T> output_pb,
     int64_t update_len = reduceMul(update.shape);
     int64_t indice_len = reduceMul(idx_shape);
 
-    // std::cout << output_len << std::endl;
-
     T* g_output;
     T* g_update;
     int64_t* g_indice;
-
     int64_t* g_output_shape;
+
     cudaCheck(cudaMalloc(&g_output_shape, output_shape_size * sizeof(int64_t)));
     cudaCheck(cudaMemcpy(g_output_shape, vec2ptr(output_shape),
                 output_shape_size * sizeof(int64_t),
                 cudaMemcpyHostToDevice));
 
-    std::cout << output_len << std::endl;
+    
     cudaCheck(cudaMalloc(&g_output, output_len * sizeof(T)));
-    // T* g_update;
     cudaCheck(cudaMalloc(&g_update, update_len * sizeof(T)));
-    // int64_t* g_indice;
     cudaCheck(cudaMalloc(&g_indice, indice_len * sizeof(int64_t)));
     cudaCheck(cudaMemcpy(g_output, p_output,
                 output_len * sizeof(T), cudaMemcpyHostToDevice));
@@ -166,35 +162,31 @@ void scatter_nd(pybind11::array_t<T> output_pb,
                 update_len * sizeof(T), cudaMemcpyHostToDevice));
     cudaCheck(cudaMemcpy(g_indice, p_idx,
                 indice_len * sizeof(int64_t), cudaMemcpyHostToDevice));
-
     
     // open log_path
-    // std::ofstream fs;
-    // fs.open(log_path,std::ios::out|std::ios::app);
+    std::ofstream fs;
+    fs.open("result.txt",std::ios::out|std::ios::app);
 
     // bad scalability: {bs, dep, seq, hs}
-    // std::string setting = "(dep, seq, bs, hs) = (" +
-    //                         std::to_string(output_shape[1]) + ", " +
-    //                         std::to_string(output_shape[2]) + ", " +
-    //                         std::to_string(output_shape[0]) + ", " +
-    //                         std::to_string(output_shape[3]) + ")";
+    std::string setting = "(dep, seq, bs, hs) = (" +
+                            std::to_string(output_shape[1]) + ", " +
+                            std::to_string(output_shape[2]) + ", " +
+                            std::to_string(output_shape[0]) + ", " +
+                            std::to_string(output_shape[3]) + ")";
 
     // timeKeep(1000, 10, setting, fs, 
-    //         call_scatter(grid, block, 
-    //                 update_t.data(), idx_t.data(), output_t.mutable_data(),
+    //         call_scatter<T>(grid, block, 
+    //                 g_update, g_indice, g_output,
     //                 g_output_shape, idx_number, each_update_size, each_idx_len));
     ScatterNdCUDAKernel<float><<<grid, block, 0>>>(
             g_update, g_indice, g_output,
             g_output_shape, idx_number, each_update_size, each_idx_len);
     
     cudaDeviceSynchronize();
-    // output_t.print_data();
-    // output_t.data_sync();
+
     cudaCheck(cudaMemcpy(p_output, g_output,
                        output_len * sizeof(T), cudaMemcpyDeviceToHost));
-    std::cout << p_output[0] << std::endl;
-    // fs.close();
-    
+
+    fs.close();
     // cudaCheck(cudaFree(g_output));
-    
 }

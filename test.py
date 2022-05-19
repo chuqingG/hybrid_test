@@ -23,15 +23,15 @@ if __name__ == "__main__":
     else:
         y_shape = [BATCH_SIZE, DEPTH, SEQ_LEN, HIDDEN_SIZE];
         h0_shape = [BATCH_SIZE, HIDDEN_SIZE];
-    
-        ysss = np.zeros(y_shape)
-        h0 = np.random.randn(*h0_shape)
-        
+
+        ysss = np.zeros(y_shape, dtype=np.float32)
+        h0 = np.random.randn(*h0_shape).astype(np.float32)
+
         idx_l = [[i, 0, 0] for i in range(BATCH_SIZE)]
         indices = np.array(idx_l)
         print(ysss)
         print(h0)
-        
+
         scatter_nd(ysss, indices, h0)
         print(ysss)
     

@@ -1,0 +1,4 @@
+src/temp*
+build/*
+build_temp/*
+result.txt

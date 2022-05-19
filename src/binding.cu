@@ -47,7 +47,5 @@ PYBIND11_MODULE(fastop, m) {
 
     bind_multiply_vector(m);
     bind_scatter_nd(m);
-    // bind_tensor<float>(m);
-    // bind_tensor<int64_t>(m);
 
 }
