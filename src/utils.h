@@ -121,6 +121,9 @@ T* vec2list(std::vector<T> vec){
   return p;
 }
 
-void testtest(){
-  std::cout << "hi" << std::endl;
+int64_t reduceMul(vector<int64_t> &shapes){
+    int64_t res = 1;
+    for(auto l : shapes)
+        res *= l;
+    return res;
 }

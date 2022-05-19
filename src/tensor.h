@@ -50,7 +50,10 @@ class Tensor{
         }
 
     }
-    ~Tensor();
+    ~Tensor() {
+        if (device_ == "cuda")
+            cudaFree(cudadata_);
+    }
 
 
     const T* data() const {
@@ -71,12 +74,30 @@ class Tensor{
         return shapes_;
     }
 
+    int64_t total_len() {
+        return total_len_;
+    }
+
     std::string dtype() {
         return dtype_;
     }
 
+    void data_sync(){
+        if (device_ == "cuda"){
+            cudaMemcpy(data_, cudadata_,
+                       total_len_ * sizeof(T), cudaMemcpyDeviceToHost);
+
+            // std::cout << data_[0] << std::endl;
+        }
+    }
+
     void print_data(){
         int64_t* shape_l = vec2ptr<int64_t>(shapes_);
+        T* ptr;
+        if (device_ == "cuda")
+            ptr = cudadata_;
+        else
+            ptr = data_;
         if (shapes_.size() == 3){
             int x = shape_l[0];
             int y = shape_l[1];

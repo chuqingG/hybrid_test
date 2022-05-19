@@ -78,26 +78,3 @@ void map_array(pybind11::array_t<T> vec, T scalar)
     throw std::runtime_error(cudaGetErrorString(error));
   }
 }
-
-// PYBIND11_MODULE(fastop
-//   m.def("multiply_with_scalar", map_array<double>);
-// }
-
-// using Array = Eigen::Array<double, Eigen::Dynamic, 1>;
-// using Eigen::Ref;
-
-// double dot_product(const Ref<const Array> &x, const Ref<const Array> &y) {
-//     const int size = x.size();
-//     double sum = 0;
-
-//     const double *x_p = x.data();
-//     const double *y_p = y.data();
-
-//     // #pragma omp simd reduction(+: sum)
-//     for (int i = 0; i < size; i++) {
-//         sum += x_p[i]*y_p[i];
-//     }
-
-//     return sum;
-//     //return x.matrix().dot(y.matrix());
-// }
