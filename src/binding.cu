@@ -7,7 +7,7 @@
 #include <cuda_runtime.h>
 #include "multiply.cu"
 #include "scatter.cu"
-#include "lstm.cu"
+#include "lstmcell.cu"
 #include "tensor.h"
 
 

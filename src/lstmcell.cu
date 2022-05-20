@@ -1,5 +1,6 @@
 // #include "../../tvm/src/runtime/cuda/cuda_device_api.cc"
 // #include "../../tvm/src/runtime/cuda/cuda_module.cc"
+#pragma once
 
 #include <dlpack/dlpack.h>
 #include <tvm/driver/driver_api.h>
@@ -40,78 +41,6 @@ constexpr int64_t batch_size = 128;
 constexpr int64_t input_size = 512;
 constexpr int64_t hidden_size = 512;
 
-// void lstm_cell() {
-//   
-//   This function works only if the .so built from te
-//   
-  // DLDevice dev{kDLCUDA, 0};
-  // // DLDevice dev{kDLCPU, 0};
-  // std::string lib_path = "lib/cell_b128_h128.so";
-
-  // bool enabled = tvm::runtime::RuntimeEnabled("cuda");
-  
-  // const tvm::runtime::PackedFunc* graph_executor_create =
-  //     tvm::runtime::Registry::Get("tvm.graph_executor.create");
-  
-  // auto lib = tvm::runtime::Module::LoadFromFile(lib_path);
-  // tvm::runtime::PackedFunc f = lib.GetFunction("cell");
-  // ICHECK(f != nullptr);
-
-  // DLTensor* x;
-  // DLTensor* h;
-  // DLTensor* c;
-  // DLTensor* w;
-  // DLTensor* u;
-  // DLTensor* ht;
-  // DLTensor* ct;
-
-  // int ndim = 2;
-  // int dtype_code = kDLFloat;
-  // int dtype_bits = 32;
-  // int dtype_lanes = 1;
-  // int device_type = kDLCPU;
-  // int device_id = 0;
-
-  // int64_t input_shape[2] = {batch_size, input_size};
-  // DLTensor* x;
-  // TVMArrayAlloc(input_shape, 2 /*ndim*/, dtype_code, dtype_bits, dtype_lanes,
-  //               device_type, device_id, &x);
-  // initArray(x, batch_size * input_size);
-
-  // int64_t state_shape[2] = {batch_size, hidden_size};
-  // DLTensor* h_prev;
-  // TVMArrayAlloc(state_shape, 2 /*hdim*/, dtype_code, dtype_bits, dtype_lanes,
-  //               device_type, device_id, &h_prev);
-  // initArray(h_prev, batch_size * hidden_size);
-
-  // DLTensor* c_prev;
-  // TVMArrayAlloc(state_shape, 2 /*hdim*/, dtype_code, dtype_bits, dtype_lanes,
-  //               device_type, device_id, &c_prev);
-  // initArray(c_prev, batch_size * hidden_size);
-
-  // int64_t output_shape[2] = {batch_size, hidden_size};
-  // DLTensor* y;
-  // TVMArrayAlloc(output_shape, 2 /*hdim*/, dtype_code, dtype_bits, dtype_lanes,
-  //               device_type, device_id, &y);
-  // initArray(y, batch_size * hidden_size);
-
-  // set_input("input", x);
-  // set_input("h_prev", h_prev);
-  // set_input("c_prev", c_prev);
-
-  // run();
-  // get_output(0, y);
-
-  // TVMArrayFree(x);
-  // TVMArrayFree(h_prev);
-  // TVMArrayFree(c_prev);
-  // TVMArrayFree(y);
-// }
-
-// int main() {
-//   lstm_cell();
-//   return 0;
-// }
 
 template <typename T>
 void lstm_cell(pybind11::array_t<T> x_pb,
