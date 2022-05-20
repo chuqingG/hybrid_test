@@ -5,7 +5,7 @@ from tvm import te, auto_scheduler, relay
 from tvm.contrib import graph_executor
 import numpy as np
 from time import time
-from fastop import gather_nd_ori, lstmcell_ori
+from fastop import gather_nd_ori, lstmcell_ori, lstm_ori
 from rich import print
 from lstm import cell
 
@@ -25,6 +25,15 @@ def lstmcell(x: np.array, h:np.array, c:np.array,
     ct = np.zeros(h_shape, dtype=np.float32)
     lstmcell_ori(x, h, c, w, u, ht, ct)
     return ht, ct
+
+
+def lstm_network(x: np.array, h:np.array, c:np.array,
+             w:np.array, u:np.array):
+    out_shape = list(x.shape)
+    out = np.zeros(out_shape, dtype=np.float32)
+    lstm_ori(x, h, c, w, u, out)
+    print("hihere")
+    return out
             
 
 def get_cell(target, bs, hs, dtype="float32"):

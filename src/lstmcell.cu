@@ -27,19 +27,10 @@
 
 #pragma GCC diagnostic ignored "-Wformat="
 
-void initArray(DLTensor* input, const size_t size) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> dist(-1., 1.);
-
-  for (size_t i = 0; i < size; ++i)
-    static_cast<float*>(input->data)[i] = dist(gen);
-}
-
-constexpr int64_t seq_len = 100;
-constexpr int64_t batch_size = 128;
-constexpr int64_t input_size = 512;
-constexpr int64_t hidden_size = 512;
+// constexpr int64_t seq_len = 100;
+// constexpr int64_t batch_size = 128;
+// constexpr int64_t input_size = 512;
+// constexpr int64_t hidden_size = 512;
 
 
 template <typename T>
@@ -65,8 +56,6 @@ void lstm_cell(pybind11::array_t<T> x_pb,
   int64_t batch_size = x_bf.shape[0];
   int64_t hidden_size = x_bf.shape[1];
 
-  DLDevice dev{kDLCUDA, 0};
-  // DLDevice dev{kDLCPU, 0};
   // TODO: change to params here
   std::string lib_path = "lib/cell_b128_h128.so";
 

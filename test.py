@@ -7,7 +7,7 @@ import numpy as np
 import time
 
 DEPTH=2
-SEQ_LEN=3
+SEQ_LEN=4
 BATCH_SIZE=128
 HIDDEN_SIZE=128
 
@@ -51,6 +51,9 @@ if __name__ == "__main__":
         print(out)
         
     if LSTM:
+        '''
+        .so used in TVMCXX is built here, just a demo
+        '''
         target = tvm.target.Target(target="cuda", host="llvm") 
         r0 = True
         f = get_cell(target, BATCH_SIZE, HIDDEN_SIZE)
@@ -63,8 +66,12 @@ if __name__ == "__main__":
             
     if TVMCXX:
         
-        indices = np.array([[i, 0] for i in range(BATCH_SIZE)])
-        xs0 = gather_nd(xss, indices)
+        # indices = np.array([[i, 0] for i in range(BATCH_SIZE)])
+        # xs0 = gather_nd(xss, indices)
         
-        ht, ct = lstmcell(xs0, h0[0], c0[0], ws[0], us[0])
-        print(ht)
+        # ht, ct = lstmcell(xs0, h0[0], c0[0], ws[0], us[0])
+        # print(ht)
+        
+        out = lstm_network(xss, h0, c0, ws, us)
+        print("hi")
+        print(out)

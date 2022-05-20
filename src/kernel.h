@@ -28,6 +28,7 @@ __global__ void ScatterNdCUDAKernel(const T* update, const int64_t* indices,
     }
     int64_t output_i = gather_i + slice_i;
     atomicAdd(output + output_i, *(update + i));
+    // *(output + output_i) = *(update + i);
   }
 }
 

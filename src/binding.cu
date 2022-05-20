@@ -8,6 +8,7 @@
 #include "multiply.cu"
 #include "scatter.cu"
 #include "lstmcell.cu"
+#include "lstm.cu"
 #include "tensor.h"
 
 
@@ -33,8 +34,14 @@ void bind_gather_nd(pybind11::module &m) {
 }
 
 
-void bind_lstm(pybind11::module &m) {
+void bind_lstm_cell(pybind11::module &m) {
     m.def("lstmcell_ori", lstm_cell<float>, 
+           "gather_nd_ori(output, indices, data)"
+           );
+}
+
+void bind_lstm_network(pybind11::module &m) {
+    m.def("lstm_ori", lstm_network<float>, 
            "gather_nd_ori(output, indices, data)"
            );
 }
@@ -63,5 +70,6 @@ PYBIND11_MODULE(fastop, m) {
     bind_multiply_vector(m);
     bind_scatter_nd(m);
     bind_gather_nd(m);
-    bind_lstm(m);
+    bind_lstm_cell(m);
+    bind_lstm_network(m);
 }

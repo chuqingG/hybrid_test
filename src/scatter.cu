@@ -1,3 +1,5 @@
+#pragma once
+
 #include <sstream>
 #include <iostream>
 #include <fstream>
@@ -117,7 +119,7 @@ void gather_nd(pybind11::array_t<T> output_pb,
     auto idx_shape_size = indices.ndim;
 
     auto output_shape = output.shape;
-    auto output_shape_size = output.ndim;
+    // auto output_shape_size = output.ndim;
 
     auto data_shape = data.shape;
     auto data_shape_size = data.ndim;
@@ -192,4 +194,106 @@ void gather_nd(pybind11::array_t<T> output_pb,
 
     fs.close();
     // cudaCheck(cudaFree(g_output));
+}
+
+
+/** 
+ * assume that at least p_output and p_data exist on CUDA 
+ * even use template<T>, this function exactly only works for float32 
+ * "return": g_output, still on cuda
+ */
+template <typename T>
+void gather_nd_cxx_cuda(T* g_output, T* g_data, int64_t* p_idx,
+                    vector<int64_t> &output_shape,
+                    vector<int64_t> &data_shape,
+                    vector<int64_t> &idx_shape){
+
+    auto idx_shape_size = idx_shape.size();
+    auto data_shape_size = data_shape.size();
+
+    int64_t each_idx_len = idx_shape[idx_shape_size - 1];
+    int64_t idx_number = 1;
+    for(int i = 0; i< idx_shape_size - 1; i++)
+        idx_number *= idx_shape[i];
+
+    int64_t each_size = 1;
+    for(int64_t i = each_idx_len; i < data_shape_size; i++)
+        each_size *= data_shape[i];
+
+    int block = 512;
+    int64_t n = each_size * idx_number;
+    int64_t grid = (n + block - 1) / block;
+
+    int64_t indice_len = reduceMul(idx_shape);
+
+    int64_t* g_indice;
+    int64_t* g_data_shape;
+
+    // init params on device
+    cudaCheck(cudaMalloc(&g_data_shape, data_shape_size * sizeof(int64_t)));
+    cudaCheck(cudaMemcpy(g_data_shape, vec2ptr(data_shape),
+                data_shape_size * sizeof(int64_t),
+                cudaMemcpyHostToDevice));
+
+    cudaCheck(cudaMalloc(&g_indice, indice_len * sizeof(int64_t)));
+    cudaCheck(cudaMemcpy(g_indice, p_idx,
+                indice_len * sizeof(int64_t), cudaMemcpyHostToDevice));
+    
+    GatherNdCUDAKernel<float><<<grid, block, 0>>>(
+            g_data, g_data_shape, g_indice, g_output,
+            idx_number, each_size, each_idx_len);
+    
+    cudaDeviceSynchronize();
+    // cudaCheck(cudaFree(g_output));
+}
+
+
+/** 
+ * assume that at least p_output and p_update exist on CUDA 
+ * even use template<T>, this function exactly only works for float32 
+ * "return": g_output, still on cuda
+ */
+template <typename T>
+void scatter_nd_cxx_cuda(T* g_output, T* g_update, int64_t* p_idx,
+                    vector<int64_t> &output_shape,
+                    vector<int64_t> &update_shape,
+                    vector<int64_t> &idx_shape){
+    
+    auto idx_shape_size = idx_shape.size();
+    auto output_shape_size = output_shape.size();
+
+    int64_t each_idx_len = idx_shape[idx_shape_size - 1];
+    int64_t idx_number = 1;
+    for(int i = 0; i< idx_shape_size - 1; i++)
+        idx_number *= idx_shape[i];
+
+    int64_t each_update_size = 1;
+    for(int64_t i = each_idx_len; i < output_shape_size; i++)
+        each_update_size *= output_shape[i];
+
+    int block = 512;
+    int64_t n = each_update_size * idx_number;
+    int64_t grid = (n + block - 1) / block;
+
+    int64_t indice_len = reduceMul(idx_shape);
+
+    int64_t* g_indice;
+    int64_t* g_output_shape;
+
+    // init params on device
+    cudaCheck(cudaMalloc(&g_output_shape, output_shape_size * sizeof(int64_t)));
+    cudaCheck(cudaMemcpy(g_output_shape, vec2ptr(output_shape),
+                output_shape_size * sizeof(int64_t),
+                cudaMemcpyHostToDevice));
+    
+    cudaCheck(cudaMalloc(&g_indice, indice_len * sizeof(int64_t)));
+    cudaCheck(cudaMemcpy(g_indice, p_idx,
+                indice_len * sizeof(int64_t), cudaMemcpyHostToDevice));
+    
+    ScatterNdCUDAKernel<float><<<grid, block, 0>>>(
+            g_update, g_indice, g_output,
+            g_output_shape, idx_number, each_update_size, each_idx_len);
+    
+    cudaDeviceSynchronize();
+
 }
