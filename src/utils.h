@@ -112,7 +112,7 @@ T* vec2ptr(std::vector<T> vec){
 }
 
 template <typename T>
-T* vec2list(std::vector<T> vec){
+T* vec2list(std::vector<T> &vec){
   int len = vec.size();
   T p[len];
   for(int i = 0; i < len; i++){

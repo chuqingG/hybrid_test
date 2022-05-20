@@ -2,3 +2,6 @@ src/temp*
 build/*
 build_temp/*
 result.txt
+log/*
+lib/*
+code/*

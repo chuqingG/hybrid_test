@@ -1,6 +1,7 @@
-# Better Op
+# Hybrid Test
 
-Test the performance of calling cuda from python.
+- Test the performance of calling cuda from python.
+- Test the usage of TVM's c++ interface. 
 
 ## Usage
 
