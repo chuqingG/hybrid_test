@@ -21,17 +21,17 @@ depth = 2, seqlen = 3
 
 ### Total
 以(10, 100, 64, 64)为例，近似估算kernel开销
-- cell: 0.0127ms
+- cell: 0.0127ms(mm)
   - 调用次数
     - mm ：seqlen \* depth
-    - 或bmm : 2 (seqlen + depth) - 1
+    - 或bmm : 2 (seqlen + depth) - 1 （mm与bmm各半）
 - gather/scatter: 0.0045ms
   - 理想情况下一次copy时间近似为一次scatter
   - 调用次数
     - mm ：约 5 \* seqlen \* depth
-    - 或bmm : 约 3 \* seqlen \* depth + 5 (seqlen + depth) 
+    - 或bmm : 约 7 \* (seqlen + depth) 
     - **当前实现上瓶颈为copy**(对应python中scan结果列表的append)的次数
 
-在使用bmm情况下约为2.781 + 15.749 = 18.531 ms
+在使用bmm情况下（由于暂时缺少bmm cell的测试结果）略大于2.781 + 3.465 = 6.246 ms
 - FT库中测试结果：ft = 7.962 ms, CuDNN = 14.298 ms
 
