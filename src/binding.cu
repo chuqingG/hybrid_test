@@ -9,6 +9,7 @@
 #include "scatter.cu"
 #include "lstmcell.cu"
 #include "lstm.cu"
+#include "lstm_cxx.cu"
 #include "tensor.h"
 
 
@@ -46,6 +47,12 @@ void bind_lstm_network(pybind11::module &m) {
            );
 }
 
+void bind_lstm_cxx(pybind11::module &m) {
+    m.def("lstm_cxx", lstm_cxx<float>, 
+           "gather_nd_ori(output, indices, data)"
+           );
+}
+
 
 template <typename T>
 void bind_tensor(pybind11::module &m) {
@@ -72,4 +79,5 @@ PYBIND11_MODULE(fastop, m) {
     bind_gather_nd(m);
     bind_lstm_cell(m);
     bind_lstm_network(m);
+    bind_lstm_cxx(m);
 }

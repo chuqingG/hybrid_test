@@ -38,6 +38,7 @@ target_link_libraries(fastop
   # cudart
   tvm
   cuda
+  -lcurand
   )
 
 set_target_properties(fastop PROPERTIES PREFIX "")

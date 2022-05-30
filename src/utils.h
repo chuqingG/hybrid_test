@@ -102,6 +102,16 @@ void call_scatter(int grid, int block,
 }
 
 template <typename T>
+void call_gather(int grid, int block, 
+                const T* g_data, const int64_t* g_indice,
+                T* g_output, const int64_t* g_data_shape,
+                size_t remain, size_t slice_size, size_t end_size){
+    GatherNdCUDAKernel<float><<<grid, block, 0>>>(
+            g_data, g_data_shape, g_indice, g_output,
+            remain, slice_size, end_size);
+}
+
+template <typename T>
 T* vec2ptr(std::vector<T> vec){
   int len = vec.size();
   T* p = new T(len);
@@ -126,4 +136,17 @@ int64_t reduceMul(vector<int64_t> &shapes){
     for(auto l : shapes)
         res *= l;
     return res;
+}
+
+template <typename T>
+__global__ void copykernel(const T *in, T *out, int len){
+  // Casting for improved loads and stores
+  for (int i = 0; i< len; i++) 
+    out[i] = in[i]; 
+}
+
+template <typename T>
+void call_copy(int grid, int block, 
+                const T *in, T *out, int len){
+    copykernel<T><<<grid, block, 0>>>(in, out, len);
 }

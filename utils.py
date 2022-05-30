@@ -80,7 +80,7 @@ def run_cell(f, x, h, c, w, u, bs, hs, target, dtype="float32"):
     end = time() - start
     f(x_tvm, h_tvm, c_tvm, w_tvm, u_tvm, ht_tvm, ct_tvm)
     
-    print("%.5f ms" % (end * 1000))
+    # print("%.5f ms" % (end * 1000))
     
     evaluator = f.time_evaluator(f.entry_name, dev, repeat=20)
     print("bs = %d, hs = %d : %.4f ms" % (bs, hs, 

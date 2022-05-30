@@ -79,7 +79,7 @@ void scatter_nd(pybind11::array_t<T> output_pb,
     
     // open log_path
     std::ofstream fs;
-    fs.open("result.txt",std::ios::out|std::ios::app);
+    fs.open("scatter.txt",std::ios::out|std::ios::app);
 
     // bad scalability: {bs, dep, seq, hs}
     std::string setting = "(dep, seq, bs, hs) = (" +
@@ -88,13 +88,13 @@ void scatter_nd(pybind11::array_t<T> output_pb,
                             std::to_string(output_shape[0]) + ", " +
                             std::to_string(output_shape[3]) + ")" + "  scatter";
 
-    // timeKeep(1000, 10, setting, fs, 
-    //         call_scatter<T>(grid, block, 
-    //                 g_update, g_indice, g_output,
-    //                 g_output_shape, idx_number, each_update_size, each_idx_len));
-    ScatterNdCUDAKernel<float><<<grid, block, 0>>>(
-            g_update, g_indice, g_output,
-            g_output_shape, idx_number, each_update_size, each_idx_len);
+    timeKeep(1000, 10, setting, fs, 
+            call_scatter<T>(grid, block, 
+                    g_update, g_indice, g_output,
+                    g_output_shape, idx_number, each_update_size, each_idx_len));
+    // ScatterNdCUDAKernel<float><<<grid, block, 0>>>(
+    //         g_update, g_indice, g_output,
+    //         g_output_shape, idx_number, each_update_size, each_idx_len);
     
     cudaDeviceSynchronize();
 
@@ -170,22 +170,21 @@ void gather_nd(pybind11::array_t<T> output_pb,
     
     // open log_path
     std::ofstream fs;
-    fs.open("result.txt",std::ios::out|std::ios::app);
+    fs.open("scatter.txt",std::ios::out|std::ios::app);
 
     // bad scalability: {bs, dep, seq, hs}
-    std::string setting = "(dep, seq, bs, hs) = (" +
-                            std::to_string(output_shape[1]) + ", " +
-                            std::to_string(output_shape[2]) + ", " +
-                            std::to_string(output_shape[0]) + ", " +
-                            std::to_string(output_shape[3]) + ")" + "  gather";
+    std::string setting = "(seq, bs, hs) = (" +
+                            std::to_string(data_shape[1]) + ", " +
+                            std::to_string(data_shape[0]) + ", " +
+                            std::to_string(data_shape[2]) + ")" + "  gather";
 
-    // timeKeep(1000, 10, setting, fs, 
-    //         call_scatter<T>(grid, block, 
-    //                 g_update, g_indice, g_output,
-    //                 g_output_shape, idx_number, each_update_size, each_idx_len));
-    GatherNdCUDAKernel<float><<<grid, block, 0>>>(
-            g_data, g_data_shape, g_indice, g_output,
-            idx_number, each_size, each_idx_len);
+    timeKeep(1000, 10, setting, fs, 
+            call_gather<T>(grid, block, 
+                    g_data, g_indice, g_output,
+                    g_data_shape, idx_number, each_size, each_idx_len));
+    // GatherNdCUDAKernel<float><<<grid, block, 0>>>(
+    //         g_data, g_data_shape, g_indice, g_output,
+    //         idx_number, each_size, each_idx_len);
     
     cudaDeviceSynchronize();
 
@@ -295,5 +294,6 @@ void scatter_nd_cxx_cuda(T* g_output, T* g_update, int64_t* p_idx,
             g_output_shape, idx_number, each_update_size, each_idx_len);
     
     cudaDeviceSynchronize();
-
+    cudaCheck(cudaFree(g_output_shape));
+    cudaCheck(cudaFree(g_indice));
 }

@@ -34,12 +34,12 @@ __global__ void copykernel1(int **in, int **out, int len, int N)
 
 }
 
-template <typename T>
-__global__ void copykernel(const T *in, T *out, int len){
-  // Casting for improved loads and stores
-  for (int i = 0; i< len; i++) 
-    out[i] = in[i]; 
-}
+// template <typename T>
+// __global__ void copykernel(const T *in, T *out, int len){
+//   // Casting for improved loads and stores
+//   for (int i = 0; i< len; i++) 
+//     out[i] = in[i]; 
+// }
 
 /** 
  * For the whole LSTM network,
@@ -265,7 +265,7 @@ void lstm_network(pybind11::array_t<T> x_pb,
     // gather: (bs, dep, seq, hs) -> (bs, seq, hs)
     
     cudaCheck(cudaMemcpy(p_out, p_ysss,
-                       x_len * seq_len * sizeof(T), cudaMemcpyDeviceToHost));
+                       x_len * seq_len * depth * sizeof(T), cudaMemcpyDeviceToHost));
     
     // 'error' happens even if disable all the free
     x->data = nullptr;
