@@ -1,0 +1,71 @@
+|(dep, seq, bs, hs) = (2,3,4,5)|0.0037592|||
+|(dep, seq, bs, hs) = (2,3,4,5)|0.00424954|||
+|(dep, seq, bs, hs) = (2,3,4,5)|0.00385373(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 128, 128)|0.00382854(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 4, 5)|0.00368851(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 4, 5)|0.00340493(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 4, 5)|0.00369542(ms) |||
+
+
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 64, 64) : r0=====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0272       0.0272       0.0281       0.0268       0.0003   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 128, 128) : r0=====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0317       0.0349       0.0367       0.0247       0.0050   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 256, 256) : r0=====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0544       0.0544       0.0545       0.0541       0.0002   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 512, 512) : r0=====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.2530       0.2525       0.2539       0.2525       0.0006   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 512, 512) =====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.1389       0.1390       0.1392       0.1382       0.0004   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 256, 256) =====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0358       0.0359       0.0359       0.0357       0.0001   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 128, 128) =====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0173       0.0172       0.0178       0.0170       0.0002   
+               
+=====(depth, seqlen, batchsize, hiddensize) = (2, 3, 64, 64) =====
+Execution time summary:
+ mean (ms)   median (ms)    max (ms)     min (ms)     std (ms)  
+   0.0108       0.0107       0.0113       0.0106       0.0002   
+               
+|(dep, seq, bs, hs) = (2, 3, 128, 128)  scatter|0.0040888(ms) |||
+|(dep, seq, bs, hs) = (2, 4, 128, 128)  scatter|0.00303117(ms) |||
+|(dep, seq, bs, hs) = (2, 4, 64, 64)  scatter|0.00310544(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 64, 64)  scatter|0.00456864(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 512, 512)  scatter|0.00889632(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 512, 512)  scatter|0.00888598(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 128, 128)  scatter|0.00339046(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 128, 128)  scatter|0.0034097(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 64, 64)  scatter|0.00311507(ms) |||
+|(dep, seq, bs, hs) = (2, 4, 64, 64)  scatter|0.00353552(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 128, 128)  scatter|0.00342435(ms) |||
+|(dep, seq, bs, hs) = (2, 4, 128, 128)  scatter|0.00345046(ms) |||
+|(dep, seq, bs, hs) = (1, 1, 128, 128)  scatter|0.00317667(ms) |||
+|(dep, seq, bs, hs) = (1, 16, 256, 256)  scatter|0.00354083(ms) |||
+|(dep, seq, bs, hs) = (2, 8, 128, 128)  scatter|0.00289334(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 128, 128)  scatter|0.00290592(ms) |||
+|(dep, seq, bs, hs) = (2, 3, 128, 128)  scatter|0.0028753(ms) |||
+|(dep, seq, bs, hs) = (128, 32, 128, 673)  gather|0.00282288(ms) |||
+|(seq, bs, hs) = (3, 128, 128)  gather|0.0028296(ms) |||
+|(seq, bs, hs) = (16, 64, 64)  gather|0.00280227(ms) |||
+|(seq, bs, hs) = (16, 128, 128)  gather|0.0028105(ms) |||
+|(bs, hs) = (128, 128)  copy|0.823287(ms) |||
